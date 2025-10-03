@@ -12,47 +12,6 @@ spec:
     repoURL: https://github.com/Domt301/eks_argo.git
     targetRevision: main
     path: fastapi-app
-    helm:
-      values: |
-        replicaCount: 3
-
-        image:
-          registry: public.ecr.aws
-          registryAlias: l5d5a3i0
-          repository: eks-fast-api
-          pullPolicy: Always
-          tag: latest
-
-        service:
-          type: ClusterIP
-          port: 80
-          targetPort: 8000
-
-        ingress:
-          enabled: true
-          className: alb
-          annotations:
-            alb.ingress.kubernetes.io/scheme: internet-facing
-            alb.ingress.kubernetes.io/target-type: ip
-            alb.ingress.kubernetes.io/healthcheck-path: /health
-            alb.ingress.kubernetes.io/healthcheck-interval-seconds: "15"
-            alb.ingress.kubernetes.io/healthcheck-timeout-seconds: "5"
-            alb.ingress.kubernetes.io/success-codes: "200"
-            alb.ingress.kubernetes.io/healthy-threshold-count: "2"
-            alb.ingress.kubernetes.io/unhealthy-threshold-count: "2"
-          hosts:
-            - host: ""
-              paths:
-                - path: /
-                  pathType: Prefix
-
-        resources:
-          limits:
-            cpu: 500m
-            memory: 512Mi
-          requests:
-            cpu: 250m
-            memory: 256Mi
 
   destination:
     server: https://kubernetes.default.svc

@@ -1,0 +1,38 @@
+# Production environment values
+replicaCount: 3
+
+image:
+  registry: public.ecr.aws
+  registryAlias: "l5d5a3i0"
+  repository: eks-fast-api
+  pullPolicy: IfNotPresent
+  tag: "" # Use specific version tag in production
+
+resources:
+  limits:
+    cpu: 1000m
+    memory: 1Gi
+  requests:
+    cpu: 500m
+    memory: 512Mi
+
+autoscaling:
+  enabled: true
+  minReplicas: 3
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 70
+
+ingress:
+  enabled: true
+  annotations:
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/healthcheck-path: /health
+    alb.ingress.kubernetes.io/healthcheck-interval-seconds: "30"
+    alb.ingress.kubernetes.io/ssl-redirect: "443"
+    # alb.ingress.kubernetes.io/certificate-arn: "arn:aws:acm:region:account:certificate/xxxxx" # Add your ACM certificate
+  hosts:
+    - host: "" # Add your domain name for production
+      paths:
+        - path: /
+          pathType: Prefix
